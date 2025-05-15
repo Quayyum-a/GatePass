@@ -70,6 +70,11 @@ public Resident findByAddress(String address) {
 
 @Override
 public Resident findByEmail(String email) {
+    for (Resident resident : residents) {
+        if (resident.getEmail().equals(email)) {
+            return resident;
+        }
+    }
     return null;
 }
 
