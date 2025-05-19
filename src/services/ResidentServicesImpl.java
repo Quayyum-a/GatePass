@@ -16,6 +16,10 @@ public class ResidentServicesImpl implements ResidentServices {
 
     @Override
     public RegisterResidentResponse register(RegisterResidentRequest request) {
+        Resident existingResident = residentRepository.findByEmail(request.getEmail());
+        if (existingResident != null) {
+            return null;
+        }
         Resident savedResident = residentRepository.save(map(request));
         return map(savedResident);
     }
