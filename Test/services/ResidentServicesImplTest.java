@@ -1,6 +1,7 @@
 package services;
 
 
+import data.model.Resident;
 import data.repository.ResidentRepository;
 import data.repository.Residents;
 import dtos.request.LoginResidentRequest;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 
 class ResidentServicesImplTest {
@@ -22,6 +24,7 @@ class ResidentServicesImplTest {
 
     @BeforeEach
     void setUp() {
+        Residents.reset();
         service = new ResidentServicesImpl();
         repo = new Residents();
         request = new RegisterResidentRequest();
@@ -33,7 +36,6 @@ class ResidentServicesImplTest {
         request.setAddress("123 Main St");
         request.setEmail("john@gmail.com");
         request.setPhoneNumber("5555555");
-        request.setPassword("password123");
 
         RegisterResidentResponse response = service.register(request);
 
@@ -74,6 +76,23 @@ class ResidentServicesImplTest {
 
         loginRequest.setEmail("john@gmail.com");
         loginRequest.setPassword("wrong password");
-        assertEquals(null, service.login(loginRequest));
+        assertNull(service.login(loginRequest));
+    }
+    @Test
+    public void registerAResidentWithServices_createAResidentWithRepository() {
+        request.setFullName("John Doe");
+        request.setAddress("123 Main St");
+        request.setEmail("quayyum@gmail.com");
+        request.setPhoneNumber("5555555");
+        request.setPassword("password123");
+        RegisterResidentResponse response = service.register(request);
+        assertEquals(1, response.getId());
+        Resident res = new Resident();
+
+        res.setFullName(request.getFullName());
+
+        repo.save(res);
+        assertEquals(2, repo.count());
+        assertEquals(2, res.getId());
     }
 }
