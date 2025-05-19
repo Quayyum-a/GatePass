@@ -64,5 +64,17 @@ public class Resident {
         }
         return false;
     }
+
+    @Override
+    public String toString() {
+        return "Resident{" +
+                "id=" + id +
+                ", fullName='" + fullName + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
 
