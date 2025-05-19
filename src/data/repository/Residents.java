@@ -7,8 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 public class Residents implements ResidentRepository{
-    private int currentId = 0;
-    private List<Resident> residents = new ArrayList<>();
+    private static int currentId = 0;
+    private static List<Resident> residents = new ArrayList<>();
+
+    public static void reset() {
+        residents.clear();
+        currentId = 0;
+    }
     @Override
     public Resident save(Resident resident) {
         if(isNew(resident)) {
@@ -68,30 +73,35 @@ public Resident findByAddress(String address) {
     return null;
 }
 
-@Override
-public Resident findByEmail(String email) {
-    for (Resident resident : residents) {
-        if (resident.getEmail().equals(email)) {
-            return resident;
+    @Override
+    public Resident findByEmail(String email) {
+        if (email == null) {
+            return null;
         }
-    }
-    return null;
-}
-
-@Override
-public List<Resident> findAllByFullName(String fullName) {
-    List<Resident> foundResidents = new ArrayList<>();
-    for(Resident resident : residents) {
-        if(resident.getFullName().equals(fullName)) {
-            foundResidents.add(resident);
-
+        for (Resident resident : residents) {
+            if (resident.getEmail() != null && resident.getEmail().equals(email)) {
+                return resident;
+            }
         }
+        return null;
     }
-    return foundResidents;
-}
 
-@Override
-public long count() {
-    return residents.size();
-}
+    @Override
+    public List<Resident> findAllByFullName(String fullName) {
+        if (fullName == null) {
+            return new ArrayList<>();
+        }
+        List<Resident> foundResidents = new ArrayList<>();
+        for(Resident resident : residents) {
+            if(resident.getFullName() != null && resident.getFullName().equals(fullName)) {
+                foundResidents.add(resident);
+            }
+        }
+        return foundResidents;
+    }
+
+    @Override
+    public long count() {
+        return residents.size();
+    }
 }
