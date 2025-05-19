@@ -15,6 +15,7 @@ class ResidentsTest {
 
     @BeforeEach
     public void setUp() {
+        Residents.reset();
         residents = new Residents();
     }
 
