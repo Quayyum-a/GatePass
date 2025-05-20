@@ -1,5 +1,6 @@
 package services;
 
+import data.model.AccessToken;
 import data.model.Resident;
 import data.repository.ResidentRepository;
 import data.repository.Residents;
@@ -12,6 +13,7 @@ import static utils.Mapper.*;
 
 public class ResidentServicesImpl implements ResidentServices {
     private ResidentRepository residentRepository = new Residents();
+    private AccessTokenService accessTokenService = new AccessTokenServiceImpl();
 
 
     @Override
@@ -21,14 +23,17 @@ public class ResidentServicesImpl implements ResidentServices {
             return null;
         }
         Resident savedResident = residentRepository.save(map(request));
-        return map(savedResident);
+        AccessToken accessToken = accessTokenService.generateToken(savedResident.getId());
+        RegisterResidentResponse response = map(savedResident);
+        response.setAccessToken(accessToken.getToken());
+        return response;
     }
 
     @Override
     public LoginResidentResponse login(LoginResidentRequest request) {
         Resident resident = residentRepository.findByEmail(request.getEmail());
         if (resident == null || !resident.getPassword().equals(request.getPassword())) {
-            return null;
+            throw new IllegalArgumentException("Invalid email or password");
         }
         return mapToLoginResponse(resident);
     }
