@@ -1,5 +1,7 @@
 package data.model;
 
+import java.util.List;
+
 public class Resident {
     private int id;
     private String fullName;
@@ -7,6 +9,7 @@ public class Resident {
     private String phoneNumber;
     private String email;
     private String password;
+    private List<Visitor> visitors;
 
     public int getId() {
         return id;
@@ -56,6 +59,14 @@ public class Resident {
         this.password = password;
     }
 
+    public List<Visitor> getVisitors() {
+        return visitors;
+    }
+
+    public void setVisitors(List<Visitor> visitors) {
+        this.visitors = visitors;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,7 +85,7 @@ public class Resident {
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
+                ", visitors=" + visitors +
                 '}';
     }
 }
-
