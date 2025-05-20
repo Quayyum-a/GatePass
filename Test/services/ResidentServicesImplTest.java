@@ -1,7 +1,9 @@
 package services;
 
-
+import data.model.AccessToken;
 import data.model.Resident;
+import data.repository.AccessTokenRepository;
+import data.repository.AccessTokens;
 import data.repository.ResidentRepository;
 import data.repository.Residents;
 import dtos.request.LoginResidentRequest;
@@ -11,27 +13,30 @@ import dtos.response.RegisterResidentResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 
 class ResidentServicesImplTest {
 
     private ResidentServices service;
     private ResidentRepository repo;
+    private AccessTokenRepository tokenRepo;
     private RegisterResidentRequest request;
     private LoginResidentRequest loginRequest;
 
     @BeforeEach
     void setUp() {
         Residents.reset();
+        AccessTokens.reset();
         service = new ResidentServicesImpl();
         repo = new Residents();
+        tokenRepo = new AccessTokens();
         request = new RegisterResidentRequest();
         loginRequest = new LoginResidentRequest();
     }
     @Test
-    public void registerResident_CountIsOne() {
+    public void registerResident_CountIsOne_AndAccessTokenIsGenerated() {
         request.setFullName("John Doe");
         request.setAddress("123 Main St");
         request.setEmail("john@gmail.com");
@@ -40,10 +45,17 @@ class ResidentServicesImplTest {
         RegisterResidentResponse response = service.register(request);
 
         assertEquals(1, repo.count());
+        assertEquals(1, tokenRepo.count());
         assertEquals("John Doe", response.getFullName());
         assertEquals("123 Main St", response.getAddress());
         assertEquals("john@gmail.com", response.getEmail());
         assertEquals("5555555", response.getPhoneNumber());
+        assertNotNull(response.getAccessToken());
+
+        // Verify the token exists in the repository
+        AccessToken token = tokenRepo.findByToken(response.getAccessToken());
+        assertNotNull(token);
+        assertEquals(1, token.getResidentId());
     }
 
     @Test
@@ -76,7 +88,10 @@ class ResidentServicesImplTest {
 
         loginRequest.setEmail("john@gmail.com");
         loginRequest.setPassword("wrong password");
-        assertNull(service.login(loginRequest));
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            service.login(loginRequest);
+        });
     }
     @Test
     public void registerAResidentWithServices_createAResidentWithRepository() {
