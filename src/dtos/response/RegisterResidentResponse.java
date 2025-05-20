@@ -7,6 +7,7 @@ public class RegisterResidentResponse {
     private String phoneNumber;
     private String email;
     private String password;
+    private String accessToken;
 
     public void setPassword(String password) {
         this.password = password;
@@ -50,5 +51,13 @@ public class RegisterResidentResponse {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 }
