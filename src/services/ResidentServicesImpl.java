@@ -4,10 +4,14 @@ import data.model.AccessToken;
 import data.model.Resident;
 import data.repository.ResidentRepository;
 import data.repository.Residents;
+import dtos.request.GenerateAccessTokenRequest;
 import dtos.request.LoginResidentRequest;
 import dtos.request.RegisterResidentRequest;
+import dtos.response.GenerateAccessTokenResponse;
 import dtos.response.LoginResidentResponse;
 import dtos.response.RegisterResidentResponse;
+
+import java.util.Optional;
 
 import static utils.Mapper.*;
 
@@ -36,5 +40,24 @@ public class ResidentServicesImpl implements ResidentServices {
             throw new IllegalArgumentException("Invalid email or password");
         }
         return mapToLoginResponse(resident);
+    }
+
+    @Override
+    public GenerateAccessTokenResponse generateAccessToken(GenerateAccessTokenRequest request) {
+        // Verify that the resident exists
+        Optional<Resident> residentOptional = residentRepository.findById(request.getResidentId());
+        if (residentOptional.isEmpty()) {
+            throw new IllegalArgumentException("Resident not found");
+        }
+
+        // Generate the access token with visitor information
+        AccessToken accessToken = accessTokenService.generateTokenForVisitor(
+            request.getResidentId(),
+            request.getVisitorName(),
+            request.getVisitorPhoneNumber()
+        );
+
+        // Map and return the response
+        return mapToAccessTokenResponse(accessToken);
     }
 }
