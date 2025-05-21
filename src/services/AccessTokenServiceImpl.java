@@ -15,6 +15,15 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     }
 
     @Override
+    public AccessToken generateTokenForVisitor(int residentId, String visitorName, String visitorPhoneNumber) {
+        AccessToken accessToken = new AccessToken();
+        accessToken.setResidentId(residentId);
+        accessToken.setVisitorName(visitorName);
+        accessToken.setVisitorPhoneNumber(visitorPhoneNumber);
+        return accessTokenRepository.save(accessToken);
+    }
+
+    @Override
     public boolean validateToken(String token) {
         AccessToken accessToken = accessTokenRepository.findByToken(token);
         if (accessToken == null) {
