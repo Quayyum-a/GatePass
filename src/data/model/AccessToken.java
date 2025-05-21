@@ -10,6 +10,8 @@ public class AccessToken {
     private LocalDateTime expiryDate;
     private boolean isUsed;
     private int residentId;
+    private String visitorName;
+    private String visitorPhoneNumber;
 
     public AccessToken() {
         this.token = generateToken();
@@ -82,6 +84,22 @@ public class AccessToken {
         this.residentId = residentId;
     }
 
+    public String getVisitorName() {
+        return visitorName;
+    }
+
+    public void setVisitorName(String visitorName) {
+        this.visitorName = visitorName;
+    }
+
+    public String getVisitorPhoneNumber() {
+        return visitorPhoneNumber;
+    }
+
+    public void setVisitorPhoneNumber(String visitorPhoneNumber) {
+        this.visitorPhoneNumber = visitorPhoneNumber;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -100,6 +118,8 @@ public class AccessToken {
                 ", expiryDate=" + expiryDate +
                 ", isUsed=" + isUsed +
                 ", residentId=" + residentId +
+                ", visitorName='" + visitorName + '\'' +
+                ", visitorPhoneNumber='" + visitorPhoneNumber + '\'' +
                 '}';
     }
 }
