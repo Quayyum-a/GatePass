@@ -1,8 +1,10 @@
 package utils;
 
+import data.model.AccessToken;
 import data.model.Resident;
 import dtos.request.LoginResidentRequest;
 import dtos.request.RegisterResidentRequest;
+import dtos.response.GenerateAccessTokenResponse;
 import dtos.response.LoginResidentResponse;
 import dtos.response.RegisterResidentResponse;
 
@@ -33,6 +35,15 @@ public class Mapper {
         response.setAddress(resident.getAddress());
         response.setPhoneNumber(resident.getPhoneNumber());
         response.setEmail(resident.getEmail());
+        return response;
+    }
+
+    public static GenerateAccessTokenResponse mapToAccessTokenResponse(AccessToken accessToken) {
+        GenerateAccessTokenResponse response = new GenerateAccessTokenResponse();
+        response.setToken(accessToken.getToken());
+        response.setExpiryDate(accessToken.getExpiryDate());
+        response.setVisitorName(accessToken.getVisitorName());
+        response.setVisitorPhoneNumber(accessToken.getVisitorPhoneNumber());
         return response;
     }
 }
