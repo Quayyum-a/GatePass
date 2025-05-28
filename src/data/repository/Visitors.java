@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-
-public class Visistors implements VisitorRepository {
+public class Visitors implements VisitorRepository {
     private static int currentId = 0;
     private static List<Visitor> visitors = new ArrayList<>();
 
@@ -51,10 +50,9 @@ public class Visistors implements VisitorRepository {
         return null;
     }
 
-
     @Override
-    public void delete(Visitor accessToken) {
-        visitors.remove(accessToken);
+    public void delete(Visitor visitor) {
+        visitors.remove(visitor);
     }
 
     @Override
@@ -64,7 +62,6 @@ public class Visistors implements VisitorRepository {
 
     @Override
     public Optional<Visitor> findById(long id) {
-
         for (Visitor visitor : visitors) {
             if (visitor.getId() == id) {
                 return Optional.of(visitor);
@@ -75,13 +72,12 @@ public class Visistors implements VisitorRepository {
 
     @Override
     public List<AccessToken> findAllByVisitorId(int visitorId) {
-        List<AccessToken> tokens = new ArrayList<>();
         for (Visitor visitor : visitors) {
             if (visitor.getId() == visitorId) {
-                tokens.addAll(visitor.getAccessTokens());
+                return new ArrayList<>(visitor.getAccessTokens());
             }
         }
-        return tokens;
+        return List.of();
     }
 
     @Override
