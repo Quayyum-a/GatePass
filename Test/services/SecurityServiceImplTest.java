@@ -25,13 +25,11 @@ class SecurityServiceImplTest {
 
     @Test
     void validateVisitorAccess_ValidToken_ReturnsVisitorInformation() {
-        // Generate a token for a visitor
+
         AccessToken token = accessTokenService.generateTokenForVisitor(1, "John Doe", "1234567890");
-        
-        // Validate the token
+
         GenerateAccessTokenResponse response = securityService.validateVisitorAccess(token.getToken());
-        
-        // Verify the response
+
         assertEquals(token.getToken(), response.getToken());
         assertEquals(token.getExpiryDate(), response.getExpiryDate());
         assertEquals("John Doe", response.getVisitorName());
@@ -40,7 +38,7 @@ class SecurityServiceImplTest {
     
     @Test
     void validateVisitorAccess_InvalidToken_ThrowsException() {
-        // Try to validate a non-existent token
+
         assertThrows(IllegalArgumentException.class, () -> {
             securityService.validateVisitorAccess("non-existent-token");
         });
@@ -48,17 +46,13 @@ class SecurityServiceImplTest {
     
     @Test
     void grantAccess_ValidToken_MarksTokenAsUsed() {
-        // Generate a token for a visitor
+
         AccessToken token = accessTokenService.generateTokenForVisitor(1, "John Doe", "1234567890");
-        
-        // Grant access
+
         securityService.grantAccess(token.getToken());
-        
-        // Verify the token is marked as used
+
         AccessToken updatedToken = accessTokenRepository.findByToken(token.getToken());
         assertTrue(updatedToken.isUsed());
-        
-        // Verify that a used token is no longer valid
         assertThrows(IllegalArgumentException.class, () -> {
             securityService.validateVisitorAccess(token.getToken());
         });
@@ -66,13 +60,11 @@ class SecurityServiceImplTest {
     
     @Test
     void getAccessTokenDetails_ValidToken_ReturnsTokenDetails() {
-        // Generate a token for a visitor
+
         AccessToken token = accessTokenService.generateTokenForVisitor(1, "John Doe", "1234567890");
-        
-        // Get the token details
+
         AccessToken tokenDetails = securityService.getAccessTokenDetails(token.getToken());
-        
-        // Verify the details
+
         assertEquals(token.getId(), tokenDetails.getId());
         assertEquals(token.getToken(), tokenDetails.getToken());
         assertEquals(token.getCreationDate(), tokenDetails.getCreationDate());
@@ -85,7 +77,7 @@ class SecurityServiceImplTest {
     
     @Test
     void getAccessTokenDetails_InvalidToken_ThrowsException() {
-        // Try to get details for a non-existent token
+
         assertThrows(IllegalArgumentException.class, () -> {
             securityService.getAccessTokenDetails("non-existent-token");
         });
