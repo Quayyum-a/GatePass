@@ -44,20 +44,17 @@ public class ResidentServicesImpl implements ResidentServices {
 
     @Override
     public GenerateAccessTokenResponse generateAccessToken(GenerateAccessTokenRequest request) {
-        // Verify that the resident exists
         Optional<Resident> residentOptional = residentRepository.findById(request.getResidentId());
         if (residentOptional.isEmpty()) {
             throw new IllegalArgumentException("Resident not found");
         }
 
-        // Generate the access token with visitor information
         AccessToken accessToken = accessTokenService.generateTokenForVisitor(
             request.getResidentId(),
             request.getVisitorName(),
             request.getVisitorPhoneNumber()
         );
 
-        // Map and return the response
         return mapToAccessTokenResponse(accessToken);
     }
 }
