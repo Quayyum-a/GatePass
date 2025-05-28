@@ -1,5 +1,8 @@
 package data.model;
 
+import java.util.Collection;
+import java.util.List;
+
 public class Visitor {
     private int id;
     private String fullName;
@@ -29,4 +32,7 @@ public class Visitor {
         this.phoneNumber = phoneNumber;
     }
 
+    public Collection<? extends AccessToken> getAccessTokens() {
+        return List.of();
+    }
 }
