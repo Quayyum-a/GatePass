@@ -24,7 +24,6 @@ public class Mapper {
         response.setAddress(resident.getAddress());
         response.setPhoneNumber(resident.getPhoneNumber());
         response.setEmail(resident.getEmail());
-        response.setPassword(resident.getPassword());
         return response;
     }
     public static LoginResidentResponse mapToLoginResponse(Resident resident) {
