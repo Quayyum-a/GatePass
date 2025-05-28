@@ -4,7 +4,6 @@ public class Security {
     private int id;
     private String name;
     private String employeeId;
-    private String position;
 
     public int getId() {
         return id;
@@ -30,13 +29,6 @@ public class Security {
         this.employeeId = employeeId;
     }
 
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -53,7 +45,6 @@ public class Security {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", employeeId='" + employeeId + '\'' +
-                ", position='" + position + '\'' +
                 '}';
     }
 }
