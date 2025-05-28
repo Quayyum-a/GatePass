@@ -2,7 +2,6 @@ package utils;
 
 import data.model.AccessToken;
 import data.model.Resident;
-import dtos.request.LoginResidentRequest;
 import dtos.request.RegisterResidentRequest;
 import dtos.response.GenerateAccessTokenResponse;
 import dtos.response.LoginResidentResponse;
