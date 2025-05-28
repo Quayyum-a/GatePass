@@ -56,7 +56,6 @@ class ResidentServicesImplTest {
         assertEquals("5555555", response.getPhoneNumber());
         assertNotNull(response.getAccessToken());
 
-        // Verify the token exists in the repository
         AccessToken token = tokenRepo.findByToken(response.getAccessToken());
 
         assertEquals(1, token.getResidentId());
@@ -117,7 +116,6 @@ class ResidentServicesImplTest {
 
     @Test
     public void generateAccessToken_ForVisitor_ReturnsTokenWithVisitorInformation() {
-        // Register a resident first
         request.setFullName("John Doe");
         request.setAddress("123 Main St");
         request.setEmail("john@gmail.com");
@@ -125,20 +123,15 @@ class ResidentServicesImplTest {
         request.setPassword("password123");
         RegisterResidentResponse registerResponse = service.register(request);
 
-        // Set up the access token request
         accessTokenRequest.setResidentId(registerResponse.getId());
         accessTokenRequest.setVisitorName("Jane Smith");
         accessTokenRequest.setVisitorPhoneNumber("9876543210");
 
-        // Generate the access token
         GenerateAccessTokenResponse response = service.generateAccessToken(accessTokenRequest);
-
-        // Verify the response
 
         assertEquals("Jane Smith", response.getVisitorName());
         assertEquals("9876543210", response.getVisitorPhoneNumber());
 
-        // Verify the token exists in the repository
         AccessToken token = tokenRepo.findByToken(response.getToken());
 
         assertEquals(registerResponse.getId(), token.getResidentId());
@@ -148,12 +141,11 @@ class ResidentServicesImplTest {
 
     @Test
     public void generateAccessToken_InvalidResidentId_ThrowsException() {
-        // Set up the access token request with an invalid resident ID
+
         accessTokenRequest.setResidentId(999);
         accessTokenRequest.setVisitorName("Jane Smith");
         accessTokenRequest.setVisitorPhoneNumber("9876543210");
 
-        // Try to generate the access token
         assertThrows(IllegalArgumentException.class, () -> {
             service.generateAccessToken(accessTokenRequest);
         });
