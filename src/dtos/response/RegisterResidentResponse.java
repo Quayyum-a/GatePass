@@ -6,12 +6,8 @@ public class RegisterResidentResponse {
     private String address;
     private String phoneNumber;
     private String email;
-    private String password;
     private String accessToken;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 
     public String getPhoneNumber() {
         return phoneNumber;
