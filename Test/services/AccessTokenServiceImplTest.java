@@ -27,14 +27,12 @@ class AccessTokenServiceImplTest {
     public void generateToken_CreatesTokenWithCorrectResidentId() {
         AccessToken token = service.generateToken(1);
 
-        // Instead of assertNotNull, we'll verify specific properties
         assertEquals(1, token.getResidentId());
         assertFalse(token.getToken().isEmpty());
         assertFalse(token.isUsed());
         assertTrue(token.getCreationDate().isBefore(LocalDateTime.now().plusSeconds(1)));
         assertTrue(token.getExpiryDate().isAfter(LocalDateTime.now()));
 
-        // Verify expiry date is 24 hours after creation date
         LocalDateTime expectedExpiryDate = token.getCreationDate().plusHours(24);
         assertEquals(expectedExpiryDate, token.getExpiryDate());
     }
@@ -64,7 +62,7 @@ class AccessTokenServiceImplTest {
         AccessToken updatedToken = repository.findByToken(token.getToken());
         assertTrue(updatedToken.isUsed());
 
-        // Validate that a used token is no longer valid
+
         assertThrows(IllegalArgumentException.class, () -> {
             service.validateToken(token.getToken());
         });
@@ -83,12 +81,11 @@ class AccessTokenServiceImplTest {
     public void isTokenExpired_ExpiredToken_ReturnsTrue() throws Exception {
         AccessToken token = service.generateToken(1);
 
-        // Manually set the expiry date to the past using reflection
         Field expiryDateField = AccessToken.class.getDeclaredField("expiryDate");
         expiryDateField.setAccessible(true);
         expiryDateField.set(token, LocalDateTime.now().minusHours(1));
 
-        // Save the modified token
+
         repository.save(token);
 
         boolean isExpired = service.isTokenExpired(token.getToken());
@@ -98,16 +95,14 @@ class AccessTokenServiceImplTest {
 
     @Test
     public void generateTokenWithService_CreateAnotherTokenWithRepository() {
-        // Generate a token using the service
+
         AccessToken token = service.generateToken(1);
         assertEquals(1, repository.count());
 
-        // Create another token directly with the repository
         AccessToken newToken = new AccessToken();
         newToken.setResidentId(2);
         repository.save(newToken);
 
-        // Verify both tokens exist
         assertEquals(2, repository.count());
         assertEquals(1, token.getId());
         assertEquals(2, newToken.getId());
